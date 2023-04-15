@@ -11,13 +11,35 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(cuid())
-  name  String
-  email String @unique
-  phone String @unique
+  id       String @id @default(cuid())
+  name     String
+  email    String @unique
+  phone    String @unique
+  userType String @map(name: "user_type")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
+  services Service[]
+
   @@map(name: "users")
+}
+
+model Service {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  value        Int
+  serviceType  String   @map(name: "service_type")
+  serviceClass String   @map(name: "service_class")
+  validTo      DateTime @map(name: "valid_to ")
+  validFrom    DateTime @map(name: "valid_from")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  provider   User   @relation(fields: [providerId], references: [id])
+  providerId String
+
+  @@map(name: "services")
 }
