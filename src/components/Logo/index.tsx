@@ -4,7 +4,7 @@ const titleFont = Suwannaphum({ subsets: ["latin"], weight: "700" });
 
 export default function Logo() {
   return (
-    <div className="flex bg-slate-500 justify-center items-center flex-row  ">
+    <div className="flex justify-center items-center flex-row  ">
       <h2
         className={`${titleFont.className} mb-3 text-5xl font-bold mt-3 mr-2`}
       >
