@@ -26,11 +26,14 @@ model User {
 }
 
 model Service {
-  id           Int      @id @default(autoincrement())
-  title        String
-  description  String
-  value        Int
-  serviceType  String   @map(name: "service_type")
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  value       Int
+
+  serviceType   ServiceType @relation(fields: [serviceTypeId], references: [id])
+  serviceTypeId Int
+
   serviceClass String   @map(name: "service_class")
   validTo      DateTime @map(name: "valid_to ")
   validFrom    DateTime @map(name: "valid_from")
@@ -42,4 +45,13 @@ model Service {
   providerId String
 
   @@map(name: "services")
+}
+
+model ServiceType {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  services    Service[]
+
+  @@map(name: "service_types")
 }
