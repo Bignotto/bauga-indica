@@ -1,17 +1,83 @@
 import Logo from "@/components/Logo";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import { prisma } from "../../database/prisma";
 
-export default function Search() {
+type SearchPageProps = {
+  services: {
+    id: number;
+    title: String;
+    description: String;
+    value: number;
+    provider: {
+      name: String;
+    };
+    type: string;
+  }[];
+};
+
+export default function Search({ services }: SearchPageProps) {
   const router = useRouter();
+
+  async function handleSearch() {}
 
   const { searchText } = router.query;
   console.log({ searchText });
   return (
-    <main className="flex flex-col min-h-screen bg-red-400 max-w-5xl px-6 py-6">
-      <div className="flex">
-        <Logo />
+    <main className="flex flex-col bg-red-300 min-h-screen ">
+      <div className="flex flex-1 max-w-3xl min-w-max flex-col bg-blue-200 px-6 py-6">
+        <div className="flex">
+          <Logo />
+        </div>
+        <h1>This is the search page with the searched text: {searchText}</h1>
+        <ul>
+          {services.map((s) => (
+            <li key={s.id}>{s.title}</li>
+          ))}
+        </ul>
       </div>
-      <h1>This is the search page with the searched text: {searchText}</h1>
     </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const searchText = query.searchText;
+
+  const dbServices = await prisma.service.findMany({
+    where: {
+      OR: [
+        {
+          title: {
+            contains: `${searchText}`,
+          },
+        },
+        {
+          description: { contains: `${searchText}` },
+        },
+      ],
+    },
+    include: {
+      provider: true,
+      serviceType: true,
+    },
+  });
+
+  const services = dbServices.map((s) => {
+    return {
+      id: s.id,
+      title: s.title,
+      description: s.description,
+      value: s.value,
+      provider: {
+        name: s.provider.name,
+      },
+      type: s.serviceType.name,
+    };
+  });
+
+  return {
+    props: {
+      services,
+    },
+  };
+};
