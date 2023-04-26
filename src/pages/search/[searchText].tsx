@@ -19,8 +19,6 @@ type SearchPageProps = {
 export default function Search({ services }: SearchPageProps) {
   const router = useRouter();
 
-  async function handleSearch() {}
-
   const { searchText } = router.query;
   console.log({ searchText });
   return (
@@ -32,7 +30,9 @@ export default function Search({ services }: SearchPageProps) {
         <h1>This is the search page with the searched text: {searchText}</h1>
         <ul>
           {services.map((s) => (
-            <li key={s.id}>{s.title}</li>
+            <li key={s.id}>
+              {s.title} - {s.provider.name}, {s.id}
+            </li>
           ))}
         </ul>
       </div>
