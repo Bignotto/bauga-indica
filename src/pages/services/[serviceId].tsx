@@ -1,27 +1,31 @@
 import Logo from "@/components/Logo";
-import { useEffect } from "react";
+import { Service } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
 
-type ServicePagerops = {
-  service: {
-    id: string;
-    title: string;
-    description: string;
-    value: number;
-  };
-};
+// type ServicePageProps = {
+//   // service: {
+//   id: string;
+//   title: string;
+//   description: string;
+//   value: number;
+//   // };
+// };
 
-export default function Service({ service }: ServicePagerops) {
+export default function Service() {
+  const router = useRouter();
+  const { serviceId } = router.query;
+
+  const [service, setService] = useState<Service>();
+
   async function loadServiceData() {
-    const response = await fetch(
-      "http://localhost:3000/api/services/getServiceById",
-      {
-        method: "POST",
-        body: JSON.stringify({ serviceId: 12, outraCoisa: 25 }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    if (!serviceId) return;
+
+    const response = await api.get(`services/${serviceId}`);
+
+    console.log({ response: response.data });
+    // if (response) setService(response);
   }
 
   useEffect(() => {
@@ -51,14 +55,16 @@ export default function Service({ service }: ServicePagerops) {
 // export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 //   const serviceId = query.serviceId;
 
-//   if (Array.isArray(serviceId)) return {};
+//   if (Array.isArray(serviceId)) return {
+//     props: {}
+//   };
 //   const id = parseInt(`${serviceId}`);
 
 //   const service = await prisma.service.findUnique({
 //     where: { id },
 //   });
 
-//   if(!service) return {}
+//   // if(!service) return {}
 
 //   return {
 //     props: {
