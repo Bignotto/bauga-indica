@@ -24,8 +24,7 @@ export default function Service() {
 
     const response = await api.get(`services/${serviceId}`);
 
-    console.log({ response: response.data });
-    // if (response) setService(response);
+    if (response) setService(response.data);
   }
 
   useEffect(() => {

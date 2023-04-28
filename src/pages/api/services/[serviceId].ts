@@ -9,22 +9,15 @@ export default async function handler(
 ) {
   const { serviceId } = req.query;
 
-  if (!Array.isArray(serviceId)) return;
-
-  const id = parseInt(`${serviceId}`);
-  if (isNaN(id)) return;
-
   const service = await prisma.service.findUnique({
-    where: { id },
+    where: { id: Array.isArray(serviceId) ? serviceId[0] : `${serviceId}` },
     include: {
       provider: true,
       serviceType: true,
     },
   });
 
-  if (!service) return res.status(404);
+  if (!service) return res.status(404).send(null);
 
-  res.status(200).json(service);
+  return res.status(200).send(service);
 }
-
-//NEXT: FIX cache
