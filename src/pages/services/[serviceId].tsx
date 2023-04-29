@@ -4,15 +4,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 
-// type ServicePageProps = {
-//   // service: {
-//   id: string;
-//   title: string;
-//   description: string;
-//   value: number;
-//   // };
-// };
-
 export default function Service() {
   const router = useRouter();
   const { serviceId } = router.query;

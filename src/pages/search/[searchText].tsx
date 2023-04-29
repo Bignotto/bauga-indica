@@ -1,5 +1,6 @@
 import Logo from "@/components/Logo";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { prisma } from "../../database/prisma";
 
@@ -20,7 +21,6 @@ export default function Search({ services }: SearchPageProps) {
   const router = useRouter();
 
   const { searchText } = router.query;
-  console.log({ searchText });
   return (
     <main className="flex flex-col bg-red-300 min-h-screen ">
       <div className="flex flex-1 max-w-3xl min-w-max flex-col bg-blue-200 px-6 py-6">
@@ -31,7 +31,10 @@ export default function Search({ services }: SearchPageProps) {
         <ul>
           {services.map((s) => (
             <li key={s.id}>
-              {s.title} - {s.provider.name}, {s.id}
+              {s.title} - {s.provider.name},{" "}
+              <Link href={`/services/${s.id}`}>
+                <p className="text-xs"> service id: {s.id}</p>
+              </Link>
             </li>
           ))}
         </ul>
