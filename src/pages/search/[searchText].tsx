@@ -29,26 +29,27 @@ export default function Search() {
     })[]
   >();
 
-  async function loadServicesList() {
-    let response;
-    if (!searchText) response = await api.get(`services`);
-    else response = await api.get(`services/search/${searchText}`);
-
-    console.log(`services/search/${searchText}`);
-    if (response) setServicesList(response.data);
-  }
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    async function loadServicesList() {
+      const response = await api.get(`services/search/${searchText}`);
+
+      console.log(`services/search/${searchText}`);
+      if (response) setServicesList(response.data);
+      setIsLoading(false);
+    }
     loadServicesList();
-  }, []);
+  }, [searchText]);
 
   return (
-    <main className="flex flex-col bg-red-300 min-h-screen ">
-      <div className="flex flex-1 max-w-3xl min-w-max flex-col bg-blue-200 px-6 py-6">
+    <main className="flex flex-col min-h-screen items-center">
+      <div className="flex flex-col min-h-screen w-4/5 px-6 py-6">
         <div className="flex">
           <Logo />
         </div>
         <h1>This is the search page with the searched text: {searchText}</h1>
+        {isLoading && <h2>Loading...</h2>}
         {servicesList && (
           <ul>
             {servicesList.map((s) => (
