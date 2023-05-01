@@ -1,8 +1,8 @@
 import Logo from "@/components/Logo";
+import { api } from "@/services/api";
 import { Service } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { api } from "../../services/api";
 
 export default function Service() {
   const router = useRouter();
