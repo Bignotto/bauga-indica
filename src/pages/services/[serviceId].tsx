@@ -1,8 +1,9 @@
 import Logo from "@/components/Logo";
+import { currency } from "@/helpers/currency";
+import { api } from "@/services/api";
 import { Service } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { api } from "../../services/api";
 
 export default function Service() {
   const router = useRouter();
@@ -23,8 +24,8 @@ export default function Service() {
   });
 
   return (
-    <main className="flex flex-col bg-red-300 min-h-screen ">
-      <div className="flex min-h-screen max-w-3xl flex-col bg-blue-200 px-6 py-6">
+    <main className="flex flex-col min-h-screen items-center">
+      <div className="flex flex-col min-h-screen w-4/5 px-6 py-6">
         <div className="flex">
           <Logo />
         </div>
@@ -33,7 +34,7 @@ export default function Service() {
           <div>
             <h2>{service.title}</h2>
             <p className="text-sm">{service.description}</p>
-            <p className="text-lg">{service.value}</p>
+            <p className="text-lg">{currency.format(service.value)}</p>
             <p className="text-xs"> service id: {service.id}</p>
           </div>
         )}

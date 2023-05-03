@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-screen items-center justify-center">
       <Logo />
-      <form className="flex flex-row mt-6 w-3/4" onSubmit={handleSearch}>
+      <form className="flex flex-row mt-6 w-4/5" onSubmit={handleSearch}>
         <div className="flex flex-1 px-4 py-4">
           <input
             className={`form-input bg-white ${textFont.className} w-full rounded-md`}
