@@ -3,7 +3,7 @@ import { currency } from "@/helpers/currency";
 import { api } from "@/services/api";
 import { Service } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function Service() {
   const router = useRouter();
@@ -23,6 +23,10 @@ export default function Service() {
     loadServiceData();
   });
 
+  async function handleVerifyContact(event: FormEvent) {
+    event.preventDefault();
+  }
+
   return (
     <main className="flex flex-col min-h-screen items-center">
       <div className="flex flex-col min-h-screen w-4/5 px-6 py-6">
@@ -38,6 +42,30 @@ export default function Service() {
             <p className="text-xs"> service id: {service.id}</p>
           </div>
         )}
+        <form
+          className="flex flex-row mt-6 w-4/5"
+          onSubmit={handleVerifyContact}
+        >
+          <div className="flex flex-1 px-4 py-4 bg-blue-200">
+            <label htmlFor="telefone">
+              Verifique seu telefone para entrar em contato
+            </label>
+            <input
+              className={`form-input bg-white w-full rounded-md`}
+              type="text"
+              placeholder="seu telefone"
+            />
+          </div>
+          <div className="flex items-center  px-4">
+            <button
+              type="submit"
+              className={` bg-slate-600 text-white w-20 h-10`}
+              onClick={handleVerifyContact}
+            >
+              Verificar
+            </button>
+          </div>
+        </form>
       </div>
     </main>
   );
