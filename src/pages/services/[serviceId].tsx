@@ -1,6 +1,7 @@
 import Logo from "@/components/Logo";
 import { currency } from "@/helpers/currency";
 import { api } from "@/services/api";
+import { twilioRest } from "@/services/twilio";
 import { Service } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
@@ -10,6 +11,7 @@ export default function Service() {
   const { serviceId } = router.query;
 
   const [service, setService] = useState<Service>();
+  const [phone, setPhone] = useState("");
 
   async function loadServiceData() {
     if (!serviceId) return;
@@ -25,6 +27,24 @@ export default function Service() {
 
   async function handleVerifyContact(event: FormEvent) {
     event.preventDefault();
+    console.log({ phone });
+
+    //NEXT: make this work with twilio lib
+    const twilioResponse = await twilioRest.post(
+      "Verifications",
+      new URLSearchParams({
+        To: "+5519982287773",
+        Channel: "sms",
+      }),
+      {
+        auth: {
+          username: process.env.TWILIO_ACCOUNT_SID!,
+          password: process.env.TWILIO_AUTH_TOKEN!,
+        },
+      }
+    );
+
+    console.log({ twilioResponse });
   }
 
   return (
@@ -54,6 +74,8 @@ export default function Service() {
               className={`form-input bg-white w-full rounded-md`}
               type="text"
               placeholder="seu telefone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
           <div className="flex items-center  px-4">
