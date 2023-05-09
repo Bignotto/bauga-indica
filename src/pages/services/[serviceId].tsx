@@ -38,8 +38,8 @@ export default function Service() {
       }),
       {
         auth: {
-          username: process.env.TWILIO_ACCOUNT_SID!,
-          password: process.env.TWILIO_AUTH_TOKEN!,
+          username: process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID!,
+          password: process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN!,
         },
       }
     );
