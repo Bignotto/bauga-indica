@@ -1,7 +1,6 @@
 import Logo from "@/components/Logo";
 import { currency } from "@/helpers/currency";
 import { api } from "@/services/api";
-import { twilioRest } from "@/services/twilio";
 import { Service } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
@@ -23,28 +22,25 @@ export default function Service() {
 
   useEffect(() => {
     loadServiceData();
-  });
+  }, []);
 
   async function handleVerifyContact(event: FormEvent) {
     event.preventDefault();
     console.log({ phone });
 
-    //NEXT: make this work with twilio lib
-    const twilioResponse = await twilioRest.post(
-      "Verifications",
-      new URLSearchParams({
-        To: "+5519982287773",
-        Channel: "sms",
-      }),
-      {
-        auth: {
-          username: process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID!,
-          password: process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN!,
-        },
-      }
-    );
+    //NEXT: deal with response
+    // Make an HTTP request to the API route to send the verification code
+    const response = await fetch("/api/send-verification-code", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ phone }),
+    });
 
-    console.log({ twilioResponse });
+    // Handle the response from the API route
+    const data = await response.json();
+    console.log(data);
   }
 
   return (
