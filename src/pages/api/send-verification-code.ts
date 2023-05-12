@@ -12,22 +12,18 @@ export default async function sendVerificationCode(
   console.log(process.env.TWILIO_SERVICE);
 
   try {
-    // Create a Twilio client instance
     const client = twilio(
       process.env.TWILIO_ACCOUNT_SID,
       process.env.TWILIO_AUTH_TOKEN
     );
 
-    // Use the Twilio Verify API to send a verification code
     const verification = await client.verify.v2
       .services(process.env.TWILIO_SERVICE!)
       .verifications.create({ to: phone, channel: "sms" });
 
-    // Return a success response
     res.status(200).json({ success: true, message: "Verification code sent" });
   } catch (error) {
     console.error(error);
-    // Return an error response
     res
       .status(500)
       .json({ success: false, message: "Failed to send verification code" });

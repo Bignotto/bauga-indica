@@ -11,6 +11,8 @@ export default function Service() {
 
   const [service, setService] = useState<Service>();
   const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
 
   async function loadServiceData() {
     if (!serviceId) return;
@@ -26,21 +28,21 @@ export default function Service() {
 
   async function handleVerifyContact(event: FormEvent) {
     event.preventDefault();
-    console.log({ phone });
+    if (!phone) return;
 
-    //NEXT: deal with response
-    // Make an HTTP request to the API route to send the verification code
-    const response = await fetch("/api/send-verification-code", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ phone }),
-    });
+    const response = await api.post("send-verification-code", { phone });
 
-    // Handle the response from the API route
-    const data = await response.json();
-    console.log(data);
+    if (response.data.success) setOtpSent(true);
+  }
+
+  async function handleVerifyOtp(event: FormEvent) {
+    event.preventDefault();
+
+    if (!otp) return;
+
+    const response = await api.post("verify-code", { phone, code: otp });
+
+    console.log(response.data);
   }
 
   return (
@@ -58,32 +60,57 @@ export default function Service() {
             <p className="text-xs"> service id: {service.id}</p>
           </div>
         )}
-        <form
-          className="flex flex-row mt-6 w-4/5"
-          onSubmit={handleVerifyContact}
-        >
-          <div className="flex flex-1 px-4 py-4 bg-blue-200">
-            <label htmlFor="telefone">
-              Verifique seu telefone para entrar em contato
-            </label>
-            <input
-              className={`form-input bg-white w-full rounded-md`}
-              type="text"
-              placeholder="seu telefone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="flex items-center  px-4">
-            <button
-              type="submit"
-              className={` bg-slate-600 text-white w-20 h-10`}
-              onClick={handleVerifyContact}
-            >
-              Verificar
-            </button>
-          </div>
-        </form>
+        {!otpSent ? (
+          <form
+            className="flex flex-row mt-6 w-4/5"
+            onSubmit={handleVerifyContact}
+          >
+            <div className="flex flex-1 px-4 py-4 bg-blue-200">
+              <label htmlFor="telefone">
+                Verifique seu telefone para entrar em contato
+              </label>
+              <input
+                className={`form-input bg-white w-full rounded-md`}
+                type="text"
+                placeholder="seu telefone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center  px-4">
+              <button
+                type="submit"
+                className={` bg-slate-600 text-white w-20 h-10`}
+                onClick={handleVerifyContact}
+              >
+                Verificar
+              </button>
+            </div>
+          </form>
+        ) : (
+          <form className="flex flex-row mt-6 w-4/5" onSubmit={handleVerifyOtp}>
+            <div className="flex flex-1 px-4 py-4 bg-blue-200">
+              <label htmlFor="otp">
+                Digite o código enviado para o seu telefone
+              </label>
+              <input
+                className={`form-input bg-white w-full rounded-md`}
+                type="text"
+                placeholder="código"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center  px-4">
+              <button
+                type="submit"
+                className={` bg-slate-600 text-white w-20 h-10`}
+              >
+                Verificar
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </main>
   );
