@@ -14,17 +14,16 @@ export default function Service() {
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
 
-  async function loadServiceData() {
-    if (!serviceId) return;
-
-    const response = await api.get(`services/${serviceId}`);
-
-    if (response) setService(response.data);
-  }
-
   useEffect(() => {
+    async function loadServiceData() {
+      if (!serviceId) return;
+
+      const response = await api.get(`services/${serviceId}`);
+
+      if (response) setService(response.data);
+    }
     loadServiceData();
-  }, []);
+  }, [serviceId]);
 
   async function handleVerifyContact(event: FormEvent) {
     event.preventDefault();
@@ -45,6 +44,7 @@ export default function Service() {
     console.log(response.data);
   }
 
+  console.log("render!!!");
   return (
     <main className="flex flex-col min-h-screen items-center">
       <div className="flex flex-col min-h-screen w-4/5 px-6 py-6">
