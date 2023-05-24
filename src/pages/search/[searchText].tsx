@@ -5,19 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-// type SearchPageProps = {
-//   services: {
-//     id: number;
-//     title: String;
-//     description: String;
-//     value: number;
-//     provider: {
-//       name: String;
-//     };
-//     type: string;
-//   }[];
-// };
-
 export default function Search() {
   const router = useRouter();
   const { searchText } = router.query;
@@ -35,7 +22,6 @@ export default function Search() {
     async function loadServicesList() {
       const response = await api.get(`services/search/${searchText}`);
 
-      console.log(`services/search/${searchText}`);
       if (response) setServicesList(response.data);
       setIsLoading(false);
     }
@@ -66,45 +52,3 @@ export default function Search() {
     </main>
   );
 }
-
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const searchText = query.searchText;
-
-//   const dbServices = await prisma.service.findMany({
-//     where: {
-//       OR: [
-//         {
-//           title: {
-//             contains: `${searchText}`,
-//           },
-//         },
-//         {
-//           description: { contains: `${searchText}` },
-//         },
-//       ],
-//     },
-//     include: {
-//       provider: true,
-//       serviceType: true,
-//     },
-//   });
-
-//   const services = dbServices.map((s) => {
-//     return {
-//       id: s.id,
-//       title: s.title,
-//       description: s.description,
-//       value: s.value,
-//       provider: {
-//         name: s.provider.name,
-//       },
-//       type: s.serviceType.name,
-//     };
-//   });
-
-//   return {
-//     props: {
-//       services,
-//     },
-//   };
-// };
