@@ -5,10 +5,7 @@ import * as yup from "yup";
 
 //NEXT: implement registration flow
 
-//TODO: fix confirmation password
-
-//TODO: fix warning
-// https://stackoverflow.com/questions/71835144/react-warning-a-component-is-changing-an-uncontrolled-input-to-be-controlled
+//TODO: Save user on database
 
 type FormDataProps = {
   username: string;
@@ -19,17 +16,34 @@ type FormDataProps = {
 };
 
 const signUpSchema = yup.object({
-  username: yup.string().required(),
-  email: yup.string().email().required(),
-  phone: yup.string().required(),
-  password: yup.string().required(),
+  username: yup.string().required("Seu nome é obrigatório."),
+  email: yup
+    .string()
+    .email("Não parece ser um endereço de e-mail válido.")
+    .required("Um endereço de e-mail é obrigatório."),
+  phone: yup
+    .string()
+    .required()
+    .test(
+      "len",
+      "Não parece ser um número de telefone válido.",
+      (val) => val.length === 11
+    ),
+  password: yup
+    .string()
+    .required()
+    .test(
+      "len",
+      "Precisa ter mais que 5 caracteres.",
+      (val) => val.length >= 6
+    ),
   confirmation: yup
     .string()
-    .oneOf([yup.ref("password")], "Passwords must match"),
+    .oneOf([yup.ref("password")], "As senhas não são iguais."),
 });
 
 export default function SignUp() {
-  const { control, handleSubmit } = useForm<FormDataProps>({
+  const { control, handleSubmit, formState } = useForm<FormDataProps>({
     resolver: yupResolver(signUpSchema),
   });
 
@@ -58,6 +72,7 @@ export default function SignUp() {
             <Controller
               control={control}
               name="username"
+              defaultValue={""}
               render={({ field: { onChange, value } }) => (
                 <input
                   type="text"
@@ -68,10 +83,14 @@ export default function SignUp() {
                 />
               )}
             />
+            {formState.errors.username && (
+              <p>{formState.errors.username.message}</p>
+            )}
           </div>
           <Controller
             control={control}
             name="email"
+            defaultValue={""}
             render={({ field: { onChange, value } }) => (
               <div className="flex flex-col mt-6">
                 <label htmlFor="email">Seu endereço de e-mail:</label>
@@ -82,12 +101,16 @@ export default function SignUp() {
                   value={value}
                   onChange={onChange}
                 />
+                {formState.errors.email && (
+                  <p>{formState.errors.email.message}</p>
+                )}
               </div>
             )}
           />
           <Controller
             control={control}
             name="phone"
+            defaultValue={""}
             render={({ field: { onChange, value } }) => (
               <div className="flex flex-col mt-6">
                 <label htmlFor="phone">Seu número de telefone:</label>
@@ -98,6 +121,9 @@ export default function SignUp() {
                   onChange={onChange}
                   value={value}
                 />
+                {formState.errors.phone && (
+                  <p>{formState.errors.phone.message}</p>
+                )}
               </div>
             )}
           />
@@ -105,6 +131,7 @@ export default function SignUp() {
             <Controller
               control={control}
               name="password"
+              defaultValue={""}
               render={({ field: { onChange, value } }) => (
                 <div className="flex flex-col w-1/3">
                   <label htmlFor="password">Senha segura:</label>
@@ -115,16 +142,29 @@ export default function SignUp() {
                     onChange={onChange}
                     value={value}
                   />
+                  {formState.errors.password && (
+                    <p>{formState.errors.password.message}</p>
+                  )}
                 </div>
               )}
             />
             <Controller
               control={control}
               name="confirmation"
+              defaultValue={""}
               render={({ field: { onChange, value } }) => (
                 <div className="flex flex-col w-1/3">
                   <label htmlFor="confirmation">Confirmação de senha:</label>
-                  <input type="text" name="confirmation" id="confirmation" />
+                  <input
+                    type="text"
+                    name="confirmation"
+                    id="confirmation"
+                    onChange={onChange}
+                    value={value}
+                  />
+                  {formState.errors.confirmation && (
+                    <p>{formState.errors.confirmation.message}</p>
+                  )}
                 </div>
               )}
             />
