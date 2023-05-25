@@ -1,4 +1,5 @@
 import Logo from "@/components/Logo";
+import { api } from "@/services/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -54,6 +55,18 @@ export default function SignUp() {
     password,
   }: FormDataProps) {
     console.log({ username, email, phone, password });
+
+    try {
+      const response = await api.post("users/create", {
+        name: username,
+        email,
+        phone,
+        password,
+      });
+      console.log({ response });
+    } catch (error) {
+      console.log({ error });
+    }
   }
 
   return (
