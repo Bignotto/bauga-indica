@@ -16,6 +16,7 @@ model User {
   email    String @unique
   phone    String @unique
   userType String @map(name: "user_type")
+  password String @default("123456")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")

@@ -4,9 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-//NEXT: implement registration flow
-
-//TODO: Save user on database
+//NEXT: To redirect user to phone validation
+//How to send phone to next page
 
 type FormDataProps = {
   username: string;
@@ -54,8 +53,6 @@ export default function SignUp() {
     phone,
     password,
   }: FormDataProps) {
-    console.log({ username, email, phone, password });
-
     try {
       const response = await api.post("users/create", {
         name: username,
@@ -63,6 +60,7 @@ export default function SignUp() {
         phone,
         password,
       });
+      //TODO: Redirect to phone validation
       console.log({ response });
     } catch (error) {
       console.log({ error });
