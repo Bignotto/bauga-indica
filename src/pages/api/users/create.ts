@@ -17,8 +17,9 @@ export default async function handler(
         data: { name, email, phone, userType: "user", password: hashPassword },
       });
 
-      return res.status(201).json({ newUser });
+      return res.status(201).json(newUser);
     } catch (error) {
+      console.log({ error });
       return res.status(500).json({ message: "Something wrong with database" });
     }
   }
