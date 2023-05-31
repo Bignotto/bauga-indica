@@ -1,11 +1,9 @@
 import Logo from "@/components/Logo";
 import { api } from "@/services/api";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
-
-//NEXT: To redirect user to phone validation
-//How to send phone to next page
 
 type FormDataProps = {
   username: string;
@@ -43,6 +41,8 @@ const signUpSchema = yup.object({
 });
 
 export default function SignUp() {
+  const router = useRouter();
+
   const { control, handleSubmit, formState } = useForm<FormDataProps>({
     resolver: yupResolver(signUpSchema),
   });
@@ -60,8 +60,15 @@ export default function SignUp() {
         phone,
         password,
       });
-      //TODO: Redirect to phone validation
+
       console.log({ response });
+
+      //TODO: implement phone number formatter helper
+      const otpRespnse = await api.post("send-verification-code", {
+        phone: `+55${phone}`,
+      });
+
+      if (otpRespnse.data.success) router.push(`/signup/validate/${phone}`);
     } catch (error) {
       console.log({ error });
     }
