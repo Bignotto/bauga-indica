@@ -34,7 +34,7 @@ export default function Home() {
         <div className="flex items-center  px-4">
           <button
             type="submit"
-            className={`${textFont.className}  bg-slate-600 w-20 h-10 rounded-md`}
+            className={`${buttonFont.className}  bg-slate-600 w-20 h-10 rounded-md`}
             onClick={handleSearch}
           >
             Buscar
