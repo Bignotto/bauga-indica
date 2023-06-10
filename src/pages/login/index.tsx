@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Suwannaphum } from "next/font/google";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { useAuth } from "../../hooks/AuthContext";
 
 type LoginFormDataProps = {
   email: string;
@@ -21,13 +22,19 @@ const loginSchema = yup.object({
 });
 
 export default function Login() {
+  const { signIn } = useAuth();
+
   const { control, handleSubmit, formState } = useForm<LoginFormDataProps>({
     resolver: yupResolver(loginSchema),
   });
 
-  async function handleLogin() {}
+  async function handleLogin({ email, password }: LoginFormDataProps) {
+    signIn(email, password);
+  }
   return (
-    <main className="flex flex-col min-h-screen items-center">
+    <main
+      className={`flex flex-col min-h-screen items-center ${textFont.className}`}
+    >
       <div className="flex flex-col w-4/5 px-6 py-6">
         <div className="flex">
           <Logo />
@@ -83,7 +90,7 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="bg-orange-400 mt-6 w-40 h-10 text-white"
+            className={`bg-orange-400 mt-6 w-40 h-10 text-white ${buttonFont.className}`}
           >
             Entrar
           </button>
