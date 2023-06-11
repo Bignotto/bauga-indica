@@ -21,6 +21,16 @@ export default function Home() {
     router.push(`/search/${searchText}`);
   }
 
+  async function handleLogin(event: FormEvent) {
+    event.preventDefault();
+
+    try {
+      await signIn();
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+
   return (
     <main className="flex flex-col items-center justify-center bg-blue-300">
       <Logo />
@@ -64,7 +74,7 @@ export default function Home() {
           <h1>Não logado</h1>
           <button
             className={`${buttonFont.className}  bg-slate-600 w-20 h-10 rounded-md`}
-            onClick={() => signIn()}
+            onClick={handleLogin}
           >
             Login
           </button>
