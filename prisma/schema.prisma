@@ -50,15 +50,17 @@ model VerificationToken {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String
-  email    String @unique
-  phone    String @unique
-  userType String @map(name: "user_type")
-  password String @default("123456")
+  id       String  @id @default(cuid())
+  name     String?
+  email    String? @unique
+  phone    String? @unique
+  userType String  @default("user") @map(name: "user_type")
+  password String? @default("123456")
 
-  phoneConfirmed Boolean @default(false)
-  emailConfirmed Boolean @default(false)
+  phoneConfirmed Boolean   @default(false)
+  emailConfirmed Boolean   @default(false)
+  emailVerified  DateTime?
+  image          String?
 
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
