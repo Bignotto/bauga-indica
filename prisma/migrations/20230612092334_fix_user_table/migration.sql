@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "emailVerified" TIMESTAMP(3),
+ADD COLUMN     "image" TEXT,
+ALTER COLUMN "name" DROP NOT NULL,
+ALTER COLUMN "email" DROP NOT NULL,
+ALTER COLUMN "phone" DROP NOT NULL,
+ALTER COLUMN "user_type" SET DEFAULT 'user',
+ALTER COLUMN "password" DROP NOT NULL;
