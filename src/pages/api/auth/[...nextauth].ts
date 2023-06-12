@@ -17,5 +17,3 @@ export const authOptions: AuthOptions = {
 };
 
 export default NextAuth(authOptions);
-
-//NEXT: Restart database
